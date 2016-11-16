@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        binding.appBarMain.contentMain.listview.setAdapter(new MainAdapter(this));
+
 
     }
 

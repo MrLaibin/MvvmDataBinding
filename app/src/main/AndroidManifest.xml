@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
-            android:label="My Application"
+            android:label="Mvvm"
             android:theme="@style/AppTheme.NoActionBar">
 
 
