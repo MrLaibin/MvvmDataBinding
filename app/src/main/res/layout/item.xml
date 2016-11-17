@@ -5,24 +5,29 @@
 
     <data>
         <variable
-            name="user"
-            type="com.mrlaibin.franke.mvvmdatabinding.User" />
+            name="stroie"
+            type="com.mrlaibin.franke.mvvmdatabinding.News.Stroie" />
         <variable
             name="adapter"
             type="com.mrlaibin.franke.mvvmdatabinding.MainAdapter" />
     </data>
 
     <LinearLayout
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        app:onClickListener="@{adapter.itemClickListener}"
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:background="#0ff"
+        android:layout_height="wrap_content">
         <TextView
-            android:text="@{user.name}"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="@{stroie.title}"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <Button
-            android:text="@{user.age}"
-            app:onClickListener="@{adapter.itemClickListener}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
+        <ImageView
+            android:src="@{stroie.images[0]}"
+            android:layout_margin="10dp"
+            android:background="#0f0"
+            android:layout_width="70dp"
+            android:layout_height="60dp" />
     </LinearLayout>
 </layout>

@@ -10,11 +10,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.mrlaibin.franke.mvvmdatabinding.databinding.ActivityMainBinding;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -49,7 +59,43 @@ public class MainActivity extends AppCompatActivity
 
         binding.appBarMain.contentMain.listview.setAdapter(new MainAdapter(this));
 
+        getAsynHttp();
+    }
 
+    OkHttpClient mOkHttpClient;
+    private void getAsynHttp() {
+        mOkHttpClient=new OkHttpClient();
+        Request.Builder requestBuilder = new Request.Builder().url("http://news-at.zhihu.com/api/4/stories/latest");
+        //可以省略，默认是GET请求
+        requestBuilder.method("GET",null);
+        Request request = requestBuilder.build();
+        Call mcall= mOkHttpClient.newCall(request);
+        mcall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null != response.cacheResponse()) {
+                    String str = response.cacheResponse().toString();
+                    Log.i("wangshu", "cache---" + str);
+                } else {
+                    response.body().string();
+                    String str = response.networkResponse().toString();
+                    String body = response.body().string();
+
+                    Log.i("wangshu", "network---" + str);
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "请求成功", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     @Override

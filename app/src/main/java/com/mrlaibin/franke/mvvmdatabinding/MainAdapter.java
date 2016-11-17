@@ -59,7 +59,7 @@ public class MainAdapter extends BaseAdapter {
         } else {
             binding = (ItemBinding) convertView.getTag();
         }
-        binding.setVariable(BR.user, mList.get(position));
+        binding.setVariable(com.mrlaibin.franke.mvvmdatabinding.BR.user, mList.get(position));
         binding.setAdapter(this);
         return convertView;
 
