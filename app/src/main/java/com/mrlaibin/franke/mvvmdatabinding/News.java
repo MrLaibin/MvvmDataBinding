@@ -8,8 +8,8 @@ import java.util.List;
 
 public class News {
 
-    private List<Stroie> stroies;
-    private List<Stroie> top_stories;
+    public List<Stroie> stories;
+    public List<Stroie> top_stories;
 
 
     public class Stroie {

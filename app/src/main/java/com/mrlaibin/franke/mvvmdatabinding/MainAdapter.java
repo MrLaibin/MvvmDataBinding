@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MainAdapter extends BaseAdapter {
     private Context mContext;
-    private List mList;
+    private List<News> mList;
     private LayoutInflater mInflater;
     public View.OnClickListener itemClickListener;
     private ItemBinding binding;
@@ -27,10 +27,10 @@ public class MainAdapter extends BaseAdapter {
         this.mContext = context;
         this.mList = new ArrayList();
         this.mInflater = LayoutInflater.from(context);
-        for (int i = 0; i < 100; i++) {
+    }
 
-            mList.add(new User("laibin" + i, "=====" + i));
-        }
+    public void reload(List list) {
+        this.mList = list;
 
     }
 
@@ -59,7 +59,7 @@ public class MainAdapter extends BaseAdapter {
         } else {
             binding = (ItemBinding) convertView.getTag();
         }
-        binding.setVariable(com.mrlaibin.franke.mvvmdatabinding.BR.user, mList.get(position));
+        binding.setVariable(com.mrlaibin.franke.mvvmdatabinding.BR.stroie, mList.get(position));
         binding.setAdapter(this);
         return convertView;
 

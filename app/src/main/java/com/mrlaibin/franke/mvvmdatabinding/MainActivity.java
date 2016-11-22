@@ -14,8 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.mrlaibin.franke.mvvmdatabinding.databinding.ActivityMainBinding;
 
 import java.io.IOException;
@@ -28,6 +28,7 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
+    MainAdapter adapter = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +57,12 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        binding.appBarMain.contentMain.listview.setAdapter(new MainAdapter(this));
+        adapter = new MainAdapter(this);
+        binding.appBarMain.contentMain.listview.setAdapter(adapter);
 
         getAsynHttp();
+
+
     }
 
     OkHttpClient mOkHttpClient;
@@ -69,8 +72,10 @@ public class MainActivity extends AppCompatActivity
         //可以省略，默认是GET请求
         requestBuilder.method("GET",null);
         Request request = requestBuilder.build();
-        Call mcall= mOkHttpClient.newCall(request);
-        mcall.enqueue(new Callback() {
+        Call call = mOkHttpClient.newCall(request);
+//请求加入调度
+        call.enqueue(new Callback()
+        {
             @Override
             public void onFailure(Call call, IOException e) {
 
@@ -78,24 +83,17 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (null != response.cacheResponse()) {
-                    String str = response.cacheResponse().toString();
-                    Log.i("wangshu", "cache---" + str);
-                } else {
-                    response.body().string();
-                    String str = response.networkResponse().toString();
-                    String body = response.body().string();
-
-                    Log.i("wangshu", "network---" + str);
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "请求成功", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                String htmlStr =  response.body().string();
+                Log.e("Tag", "onResponse: ");
+                Gson gson = new Gson();
+                News n = gson.fromJson(htmlStr, News.class);
+                Log.e("Tag", "onResponse: ");
+                adapter.reload(n.stories);
+                adapter.notifyDataSetChanged();
             }
+
         });
+
     }
 
     @Override
